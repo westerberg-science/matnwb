@@ -8,6 +8,13 @@ function val = correctType(val, type)
 class_val = class(val); %store initial class
 
 if any(strcmp(type, {'logical', 'bool'}))
+    if iscell(val)
+        if strcmp(val{1}, 'FALSE')
+            val = 0;
+        else
+            val = 1;
+        end
+    end
     assert(islogical(val) || isnumeric(val),...
         'NWB:CorrectType:NonLogical',...
         'Value of type `%s` could not be coerced into a logical value.', class(val));
@@ -31,8 +38,8 @@ assert(isempty(val) || isinteger(val) || all(0 == abs(val - fix(val))),...
     'Converting to `%s` would have dropped floating point values.',...
     type);
 
-maxVal = max(val(:));
-minVal = min(val(:));
+maxVal = max(val, [], 'all');
+minVal = min(val, [], 'all');
 
 if ~isinteger(val)
     if startsWith(type, 'uint')
