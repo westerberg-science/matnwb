@@ -9,6 +9,7 @@ if isempty(WHITELIST)
         };
 end
 
+%% compound type processing
 if isstruct(type)
     names = fieldnames(type);
     assert(isstruct(val) || istable(val) || isa(val, 'containers.Map'), ...

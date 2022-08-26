@@ -22,6 +22,13 @@ if any(strcmp(type, {'logical', 'bool'}))
     return;
 end
 
+if ischar(val)
+try
+    val = str2num(val);
+catch
+end
+end
+
 assert(isnumeric(val), 'NWB:CorrectType:NonNumericType',...
     'Expected type to be numeric. Got `%s`', class(val));
 if strcmp(type, 'numeric')
