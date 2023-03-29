@@ -86,8 +86,8 @@ classdef (Sealed) DataPipe < handle
             p.addParameter('path', '');
             p.addParameter('hasShuffle', false, ...
                 @(b) isscalar(b) && (islogical(b) || isnumeric(b)));
-            p.addParameter('filters', DynamicFilter.empty(), ...
-                @(x) isa(x, 'types.untyped.datapipe.Property'));
+            %p.addParameter('filters', DynamicFilter.empty(), ...
+            %    @(x) isa(x, 'types.untyped.datapipe.Property'));
             p.KeepUnmatched = true;
             p.parse(varargin{:});
 
@@ -160,32 +160,32 @@ classdef (Sealed) DataPipe < handle
             end
             obj.internal.setPipeProperties(Chunking(chunkSize));
 
-            hasFilters = ~isempty(p.Results.filters);
-            usingHasCompressionLevel = ~any(strcmp(p.UsingDefaults, 'compressionLevel'));
-            usingHasShuffle = ~any(strcmp(p.UsingDefaults, 'hasShuffle'));
-            if hasFilters && (usingHasCompressionLevel || usingHasShuffle)
-                warning(['`filters` keyword argument detected. This will ' ...
-                    'override `compressionLevel` and `hasShuffle` keyword ' ...
-                    'arguments. If you wish to use either `compressionLevel` ' ...
-                    'or `hasShuffle`, please add their respective filter ' ...
-                    'properties `types.untyped.datapipe.properties.Compression` ' ...
-                    'and `types.untyped.datapipe.properties.Shuffle` to the ' ...
-                    '`filters` properties array.']);
-            end
-
-            if hasFilters
-                filterCell = num2cell(p.Results.filters);
-                obj.internal.setPipeProperties(filterCell{:});
-            else
-                if -1 < p.Results.compressionLevel
-                    obj.internal.setPipeProperties(Compression(...
-                        p.Results.compressionLevel));
-                end
-
-                if logical(p.Results.hasShuffle)
-                    obj.internal.setPipeProperties(Shuffle());
-                end
-            end
+%            hasFilters = ~isempty(p.Results.filters);
+%             usingHasCompressionLevel = ~any(strcmp(p.UsingDefaults, 'compressionLevel'));
+%             usingHasShuffle = ~any(strcmp(p.UsingDefaults, 'hasShuffle'));
+%             if hasFilters && (usingHasCompressionLevel || usingHasShuffle)
+%                 warning(['`filters` keyword argument detected. This will ' ...
+%                     'override `compressionLevel` and `hasShuffle` keyword ' ...
+%                     'arguments. If you wish to use either `compressionLevel` ' ...
+%                     'or `hasShuffle`, please add their respective filter ' ...
+%                     'properties `types.untyped.datapipe.properties.Compression` ' ...
+%                     'and `types.untyped.datapipe.properties.Shuffle` to the ' ...
+%                     '`filters` properties array.']);
+%             end
+% 
+%             if hasFilters
+%                 filterCell = num2cell(p.Results.filters);
+%                 obj.internal.setPipeProperties(filterCell{:});
+%             else
+%                 if -1 < p.Results.compressionLevel
+%                     obj.internal.setPipeProperties(Compression(...
+%                         p.Results.compressionLevel));
+%                 end
+% 
+%                 if logical(p.Results.hasShuffle)
+%                     obj.internal.setPipeProperties(Shuffle());
+%                 end
+%             end
 
             obj.internal.data = p.Results.data;
         end
